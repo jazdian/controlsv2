@@ -21,7 +21,7 @@ class DataTable
       "colname"=>"",
       "attrib"=>"",         
       "onclick"=>"",
-      "param"=>0
+      "param_onclick"=>0       
    );
    private $btnEdit	 = array(
       "show"=>false,
@@ -33,7 +33,7 @@ class DataTable
       "colname"=>"",
       "attrib"=>"",         
       "onclick"=>"",
-      "param"=>0   
+      "param_onclick"=>0       
    );
    private $btnDelete	 = array(
       "show"=>false,
@@ -45,7 +45,7 @@ class DataTable
       "colname"=>"",
       "attrib"=>"",         
       "onclick"=>"",
-      "param"=>0
+      "param_onclick"=>0
    );
    private $header	 = array();
    private $datasource	 = array();
@@ -88,11 +88,14 @@ class DataTable
       if(!array_key_exists('colname', $btnSelect_)) { $btnSelect_['colname'] = ""; }
       if(!array_key_exists('attrib', $btnSelect_)) { $btnSelect_['attrib'] = ""; }
       if(!array_key_exists('onclick', $btnSelect_)) { $btnSelect_['onclick'] = ""; }
-      if(!array_key_exists('param', $btnSelect_)) { $btnSelect_['param'] = 0; }
+      if(!array_key_exists('param_onclick', $btnSelect_)) { $btnSelect_['param_onclick'] = 0; }
       
       $this->btnSelect = $btnSelect_;
    }
 
+   /**
+    * @params arrary(show, class, style, name, image, colname, attrib, onclick, param_onclick)
+    */
    public function SetBtnEdit($btnEdit_)
    {
       if(!array_key_exists('show', $btnEdit_)) { $btnEdit_['show'] = false; }
@@ -104,7 +107,7 @@ class DataTable
       if(!array_key_exists('colname', $btnEdit_)) { $btnEdit_['colname'] = ""; }
       if(!array_key_exists('attrib', $btnEdit_)) { $btnEdit_['attrib'] = ""; }
       if(!array_key_exists('onclick', $btnEdit_)) { $btnEdit_['onclick'] = ""; }
-      if(!array_key_exists('param', $btnEdit_)) { $btnEdit_['param'] = 0; }
+      if(!array_key_exists('param_onclick', $btnEdit_)) { $btnEdit_['param_onclick'] = 0; }
       
       $this->btnEdit = $btnEdit_;
    }
@@ -120,7 +123,7 @@ class DataTable
       if(!array_key_exists('colname', $btnDelete_)) { $btnDelete_['colname'] = ""; }
       if(!array_key_exists('attrib', $btnDelete_)) { $btnDelete_['attrib'] = ""; }
       if(!array_key_exists('onclick', $btnDelete_)) { $btnDelete_['onclick'] = ""; }
-      if(!array_key_exists('param', $btnDelete_)) { $btnDelete_['param'] = 0; }
+      if(!array_key_exists('param_onclick', $btnDelete_)) { $btnDelete_['param_onclick'] = 0; }
       
       $this->btnDelete = $btnDelete_;
    }
@@ -191,9 +194,9 @@ class DataTable
 	    $BodyTable	 .= '<tr>';
 	    foreach ($row as $key => $value)
 	    {
-	       if ($key == $this->btnSelect['param']){ $ids = $value; }
-	       if ($key == $this->btnEdit['param']){ $ide = $value; }
-	       if ($key == $this->btnDelete['param']){ $idd = $value; }
+	       if ($key == $this->btnSelect['param_onclick']){ $ids = $value; }
+	       if ($key == $this->btnEdit['param_onclick']){ $ide = $value; }
+	       if ($key == $this->btnDelete['param_onclick']){ $idd = $value; }
 	       
 	       $BodyTable	 .= '<td>' . $value . '</td>';
 	    }
@@ -210,18 +213,18 @@ class DataTable
    
    private function ButtonSelect($IdRow)
    {
-      $class	 = $this->btnSelect['class'];
-      $image	 = $this->btnSelect['image'];
-      $name	 = $this->btnSelect['name'];
-      $attrib	 = $this->btnSelect['attrib'];
-      $style	 = $this->btnSelect['style'];
-      $type	 = $this->btnSelect['type'];
-      $onclick	 = '' . $this->btnSelect['onclick'];
-      $onclick = str_replace("()", "($IdRow)", $onclick);
-      
-      $btnSelect = <<<EOF
-<button type="$type" class="$class" style="$style" $attrib $onclick>
-<img src="$image">&nbsp;$name
+      $class	 = ($this->btnEdit['class'] == '') ? '' : 'class="' . $this->btnEdit['class'] . '"';
+      $image	 = ($this->btnEdit['image'] == '') ? '' : '<img src="' . $this->btnEdit['image'] . '">';
+      $name	 = ($this->btnEdit['name'] == '') ? '' : $this->btnEdit['name'];
+      $attrib	 = ($this->btnEdit['attrib'] == '') ? '' : $this->btnEdit['attrib'];
+      $style	 = ($this->btnEdit['style'] == '') ? '' : 'style="' . $this->btnEdit['style'] . '"';
+      $type	 = ($this->btnEdit['type'] == '') ? '' : 'type="' . $this->btnEdit['type'] . '"';
+      $onclick	 = ($this->btnEdit['onclick'] == '') ? '' : 'OnClick="' . $this->btnEdit['onclick'] . '"';
+      $onclick = str_replace("()", "($IdRow)", $onclick);	      
+
+      $btnEdit = <<<EOF
+<button $type $class $style $attrib $onclick>
+$image $name
 </button>
 EOF;
 
@@ -230,18 +233,18 @@ EOF;
 
    private function ButtonEdit($IdRow)
    {
-      $class	 = $this->btnEdit['class'];
-      $image	 = $this->btnEdit['image'];
-      $name	 = $this->btnEdit['name'];
-      $attrib	 = $this->btnEdit['attrib'];
-      $style	 = $this->btnEdit['style'];
-      $type	 = $this->btnEdit['type'];
-      $onclick	 = $this->btnEdit['onclick'];      
+      $class	 = ($this->btnEdit['class'] == '') ? '' : 'class="' . $this->btnEdit['class'] . '"';
+      $image	 = ($this->btnEdit['image'] == '') ? '' : '<img src="' . $this->btnEdit['image'] . '">';
+      $name	 = ($this->btnEdit['name'] == '') ? '' : $this->btnEdit['name'];
+      $attrib	 = ($this->btnEdit['attrib'] == '') ? '' : $this->btnEdit['attrib'];
+      $style	 = ($this->btnEdit['style'] == '') ? '' : 'style="' . $this->btnEdit['style'] . '"';
+      $type	 = ($this->btnEdit['type'] == '') ? '' : 'type="' . $this->btnEdit['type'] . '"';
+      $onclick	 = ($this->btnEdit['onclick'] == '') ? '' : 'OnClick="' . $this->btnEdit['onclick'] . '"';
       $onclick = str_replace("()", "($IdRow)", $onclick);	      
 
       $btnEdit = <<<EOF
-<button type="$type" class="$class" style="$style" $attrib $onclick>
-<img src="$image">&nbsp;$name
+<button $type $class $style $attrib $onclick>
+$image $name
 </button>
 EOF;
 
@@ -250,18 +253,18 @@ EOF;
 
    private function ButtonDelete($IdRow)
    {
-      $class	 = $this->btnDelete['class'];
-      $image	 = $this->btnDelete['image'];
-      $name	 = $this->btnDelete['name'];
-      $attrib	 = $this->btnDelete['attrib'];
-      $style	 = $this->btnDelete['style'];
-      $type	 = $this->btnDelete['type'];
-      $onclick	 = $this->btnDelete['onclick'];
-      $onclick = str_replace("()", "($IdRow)", $onclick);	            
-      
-      $btnDelete = <<<EOF
-<button type="$type" class="$class" style="$style" $attrib $onclick>
-<img src="$image">&nbsp;$name
+      $class	 = ($this->btnEdit['class'] == '') ? '' : 'class="' . $this->btnEdit['class'] . '"';
+      $image	 = ($this->btnEdit['image'] == '') ? '' : '<img src="' . $this->btnEdit['image'] . '">';
+      $name	 = ($this->btnEdit['name'] == '') ? '' : $this->btnEdit['name'];
+      $attrib	 = ($this->btnEdit['attrib'] == '') ? '' : $this->btnEdit['attrib'];
+      $style	 = ($this->btnEdit['style'] == '') ? '' : 'style="' . $this->btnEdit['style'] . '"';
+      $type	 = ($this->btnEdit['type'] == '') ? '' : 'type="' . $this->btnEdit['type'] . '"';
+      $onclick	 = ($this->btnEdit['onclick'] == '') ? '' : 'OnClick="' . $this->btnEdit['onclick'] . '"';
+      $onclick = str_replace("()", "($IdRow)", $onclick);	      
+
+      $btnEdit = <<<EOF
+<button $type $class $style $attrib $onclick>
+$image $name
 </button>
 EOF;
 
